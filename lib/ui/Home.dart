@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/TaskProvider.dart';
 import 'file:///D:/FlutterProject/To%20Do%20App/lib/ui/AddTask.dart';
 import 'package:flutter_app/model/Tasks.dart';
 import 'package:flutter_app/service/TaskService.dart';
+import 'package:provider/provider.dart';
 
 import 'Splash.dart';
 
@@ -103,31 +105,34 @@ class _AllTasks extends State<AllTasks> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: ListView.builder(
-          reverse: false,
-          itemCount: _tasklist.length,
-          scrollDirection: Axis.vertical,
-        itemBuilder: (context,index){
-            checkboxValue= _task.getBool(_tasklist[index].status.toInt());
-            return  buildCard(
-            name: _tasklist[index].title,
-            description: _tasklist[index].description,
-      states: Checkbox(
-      value: checkboxValue,
-      onChanged: (bool val) {
-      setState(() {
-        if(_tasklist[index].status == 0){
-          _taskService.updateTask(_tasklist[index].id,1);
-          getAllTasks();
-        }else{
-          _taskService.updateTask(_tasklist[index].id,0);
-          getAllTasks();
-        }
-      });
-      }),taskService: _taskService,
-              id: _tasklist[index].id,xx: _tasklist,index: index
-      );
-      },),
+        child: Consumer<TaskProvider>(builder: (context, provider, c) {
+          child: ListView.builder(
+            reverse: false,
+            itemCount: _tasklist.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context,index){
+              checkboxValue= _task.getBool(_tasklist[index].status.toInt());
+              return  buildCard(
+                  name: _tasklist[index].title,
+                  description: _tasklist[index].description,
+                  states: Checkbox(
+                      value: checkboxValue,
+                      onChanged: (bool val) {
+                        setState(() {
+                          if(_tasklist[index].status == 0){
+                            provider.updateTask(_tasklist[index].id, 1);
+                            getAllTasks();
+                          }else{
+                            provider.updateTask(_tasklist[index].id, 0);
+                            getAllTasks();
+                          }
+                        });
+                      }),taskService: _taskService,
+                  id: _tasklist[index].id,xx: _tasklist,index: index
+              );
+            },);
+
+        }),
       ),
     );
   }
@@ -151,7 +156,7 @@ buildCard({name, description, states,taskService,id,index,List xx}) {
                 ),
                 onPressed: () {
                   xx.removeAt(index);
-                  taskService.DeleteTask("tasks", id);
+                  TaskProvider().deleteTask("table", id);
                 }),
           ],
         ),
@@ -203,31 +208,34 @@ class _InCompleted extends  State<InCompleted> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: ListView.builder(
-          reverse: false,
-          itemCount: _tasklist.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context,index){
-            checkboxValue= _task.getBool(_tasklist[index].status.toInt());
-            return  buildCard(
-                name: _tasklist[index].title,
-                description: _tasklist[index].description,
-                states: Checkbox(
-                    value: checkboxValue,
-                    onChanged: (bool val) {
-                        if(_tasklist[index].status == 0){
-                          _taskService.updateTask(_tasklist[index].id,1);
-                          _tasklist.removeAt(index);
-                          getAllTasks();
-                        }else{
-                          _taskService.updateTask(_tasklist[index].id,0);
-                          getAllTasks();
-                        }
+        child: Consumer<TaskProvider>(builder: (context, provider, c) {
+          child: ListView.builder(
+            reverse: false,
+            itemCount: _tasklist.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context,index){
+              checkboxValue= _task.getBool(_tasklist[index].status.toInt());
+              return  buildCard(
+                  name: _tasklist[index].title,
+                  description: _tasklist[index].description,
+                  states: Checkbox(
+                      value: checkboxValue,
+                      onChanged: (bool val) {
+                        setState(() {
+                          if(_tasklist[index].status == 0){
+                            provider.updateTask(_tasklist[index].id, 1);
+                            getAllTasks();
+                          }else{
+                            provider.updateTask(_tasklist[index].id, 0);
+                            getAllTasks();
+                          }
+                        });
+                      }),taskService: _taskService,
+                  id: _tasklist[index].id,xx: _tasklist,index: index
+              );
+            },);
 
-                    }),taskService: _taskService,
-                id: _tasklist[index].id,xx: _tasklist,index: index
-            );
-          },),
+        }),
       ),
     );
   }
@@ -277,32 +285,37 @@ class _Completed extends State<Completed> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: ListView.builder(
-          reverse: false,
-          itemCount: _tasklist.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context,index){
-            checkboxValue= _task.getBool(_tasklist[index].status.toInt());
-            return  buildCard(
-                name: _tasklist[index].title,
-                description: _tasklist[index].description,
-                states: Checkbox(
-                    value: checkboxValue,
-                    onChanged: (bool val) {
-                      setState(() {
-                        if(_tasklist[index].status == 0){
-                          _taskService.updateTask(_tasklist[index].id,1);
-                          getAllTasks();
-                        }else{
-                          _taskService.updateTask(_tasklist[index].id,0);
-                          getAllTasks();
-                        }
-                      });
-                    }),taskService: _taskService,
-                id: _tasklist[index].id,xx: _tasklist,index: index
-            );
-          },),
+          child: Consumer<TaskProvider>(builder: (context, provider, c) {
+            child: ListView.builder(
+              reverse: false,
+              itemCount: _tasklist.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context,index){
+                checkboxValue= _task.getBool(_tasklist[index].status.toInt());
+                return  buildCard(
+                    name: _tasklist[index].title,
+                    description: _tasklist[index].description,
+                    states: Checkbox(
+                        value: checkboxValue,
+                        onChanged: (bool val) {
+                          setState(() {
+                            if(_tasklist[index].status == 0){
+                              provider.updateTask(_tasklist[index].id, 1);
+                              getAllTasks();
+                            }else{
+                              provider.updateTask(_tasklist[index].id, 0);
+                              getAllTasks();
+                            }
+                          });
+                        }),taskService: _taskService,
+                    id: _tasklist[index].id,xx: _tasklist,index: index
+                );
+              },);
+
+    }),
       ),
     );
   }
 }
+
+

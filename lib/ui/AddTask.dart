@@ -14,7 +14,6 @@ class _PlayerState extends State<AddTask> {
   String title = "title";
   String description = "123456";
     var _task = Tasks();
-  var _taskService = TaskService();
   
   TextEditingController ftitle = TextEditingController();
   TextEditingController fdescription = TextEditingController();
